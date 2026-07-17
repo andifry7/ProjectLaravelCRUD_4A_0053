@@ -13,6 +13,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::query()
+            ->where('published', 'yes')
             ->orderByDesc('event_date')
             ->orderByDesc('created_at')
             ->get();
@@ -59,6 +60,12 @@ class PostController extends Controller
     public function show(string $id)
     {
         $post = Post::findOrFail($id);
+
+        // Jika draft, hanya admin (user login) yang bisa preview
+        if ($post->published !== 'yes' && !auth()->check()) {
+            abort(404);
+        }
+
         return view('posts.show', compact('post'));
     }
 

@@ -90,7 +90,7 @@
             <div class="d-flex align-items-center gap-3">
                 <div class="brand-mark">KB</div>
                 <div>
-                    <div class="fw-bold fs-4 lh-1">Kabar Burung</div>
+                    <a href="{{ url('/') }}" class="text-white text-decoration-none"><div class="fw-bold fs-4 lh-1">Kabar Burung</div></a>
                     <small class="text-white-50">Portal berita sederhana untuk menampilkan informasi terbaru.</small>
                 </div>
             </div>
@@ -113,6 +113,15 @@
         </div>
     </div>
 
+    @if(session('success'))
+        <div class="container mt-4">
+            <div class="alert alert-success alert-dismissible fade show rounded-3" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    @endif
+
     <main class="container py-4 py-lg-5">
         <div class="row g-4 align-items-stretch">
             <div class="col-lg-8">
@@ -121,7 +130,9 @@
                     <article class="hero-card h-100">
                         <div class="row g-0 h-100">
                             <div class="col-md-6">
-                                <img src="{{ $headline->image_url }}" class="w-100 h-100 object-fit-cover" alt="{{ $headline->title }}">
+                                <a href="{{ route('posts.show', $headline->id) }}">
+                                    <img src="{{ $headline->image_url }}" class="w-100 h-100 object-fit-cover" alt="{{ $headline->title }}">
+                                </a>
                             </div>
                             <div class="col-md-6 p-4 p-lg-5 d-flex flex-column justify-content-between">
                                 <div>
@@ -129,13 +140,17 @@
                                         <span class="badge rounded-pill text-bg-danger">Headline</span>
                                         <span>{{ $headline->publisher ?? 'Redaksi' }}</span>
                                     </div>
-                                    <h1 class="display-6 fw-bold mb-3">{{ $headline->title }}</h1>
-                                    <p class="lead text-white-50 mb-4">{{ $headline->content }}</p>
+                                    <a href="{{ route('posts.show', $headline->id) }}" class="text-white text-decoration-none">
+                                        <h1 class="display-6 fw-bold mb-3">{{ $headline->title }}</h1>
+                                    </a>
+                                    <p class="lead text-white-50 mb-4">{{ \Illuminate\Support\Str::limit($headline->content, 180) }}</p>
                                 </div>
-                                <div class="d-flex flex-wrap gap-3 align-items-center text-white-50">
-                                    <span>{{ optional($headline->event_date)->format('d M Y') ?? $headline->created_at->format('d M Y') }}</span>
-                                    <span>•</span>
-                                    <span>{{ $headline->publisher ?? 'Kabar Burung' }}</span>
+                                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 text-white-50">
+                                    <div class="d-flex gap-3 align-items-center">
+                                        <span>{{ optional($headline->event_date)->format('d M Y') ?? $headline->created_at->format('d M Y') }}</span>
+                                        <span>•</span>
+                                        <span>{{ $headline->publisher ?? 'Kabar Burung' }}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -153,7 +168,7 @@
                         @forelse($posts->take(4) as $post)
                             <div class="story-item pb-3 pt-1">
                                 <div class="story-meta mb-1">{{ $post->publisher ?? 'Redaksi' }} • {{ optional($post->event_date)->format('d M Y') ?? $post->created_at->format('d M Y') }}</div>
-                                <a href="{{ $post->source_url ?? '#' }}" class="d-block fw-semibold text-dark">{{ $post->title }}</a>
+                                <a href="{{ route('posts.show', $post->id) }}" class="d-block fw-semibold text-dark">{{ $post->title }}</a>
                             </div>
                         @empty
                             <p class="text-muted mb-0">Data berita belum tersedia.</p>
@@ -164,27 +179,35 @@
         </div>
 
         <section class="mt-4 mt-lg-5">
-            <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-3">
+            <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
                 <div>
                     <div class="section-label mb-2">Daftar Berita</div>
                     <h2 class="fw-bold mb-0">Kumpulan artikel dari berbagai publisher</h2>
                 </div>
-                <div class="text-muted">{{ $posts->count() }} artikel tersedia</div>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="text-muted">{{ $posts->count() }} artikel tersedia</div>
+                </div>
             </div>
 
             <div class="row g-4">
                 @foreach($posts->skip(1) as $post)
                     <div class="col-md-6 col-xl-4">
                         <article class="card news-card">
-                            <img src="{{ $post->image_url }}" alt="{{ $post->title }}" class="news-image">
+                            <a href="{{ route('posts.show', $post->id) }}">
+                                <img src="{{ $post->image_url }}" alt="{{ $post->title }}" class="news-image">
+                            </a>
                             <div class="card-body p-4 d-flex flex-column">
                                 <div class="d-flex align-items-center justify-content-between gap-2 mb-3">
                                     <span class="badge text-bg-light">{{ $post->publisher ?? 'Publisher' }}</span>
                                     <small class="text-muted">{{ optional($post->event_date)->format('d M Y') ?? $post->created_at->format('d M Y') }}</small>
                                 </div>
-                                <h3 class="h5 fw-bold">{{ $post->title }}</h3>
-                                <p class="text-muted grow">{{ $post->content }}</p>
-                                <a href="{{ $post->source_url ?? '#' }}" class="fw-semibold text-decoration-none" style="color: var(--news-accent);">Baca selengkapnya</a>
+                                <a href="{{ route('posts.show', $post->id) }}" class="text-dark text-decoration-none">
+                                    <h3 class="h5 fw-bold">{{ $post->title }}</h3>
+                                </a>
+                                <p class="text-muted grow">{{ \Illuminate\Support\Str::limit($post->content, 120) }}</p>
+                                <div class="d-flex justify-content-between align-items-center mt-auto pt-3 border-top">
+                                    <a href="{{ route('posts.show', $post->id) }}" class="fw-semibold text-decoration-none" style="color: var(--news-accent);">Baca selengkapnya</a>
+                                </div>
                             </div>
                         </article>
                     </div>

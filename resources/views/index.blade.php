@@ -102,6 +102,7 @@
                     <a href="{{ route('login') }}" class="btn btn-sm btn-outline-light rounded-pill px-3">Login</a>
                     <a href="{{ route('register') }}" class="btn btn-sm btn-danger rounded-pill px-3">Register</a>
                 @else
+                    <a href="{{ url('/profile') }}" class="btn btn-sm btn-outline-light rounded-pill px-3">Profil</a>
                     <a href="{{ url('/home') }}" class="btn btn-sm btn-outline-light rounded-pill px-3">Home</a>
                     <form action="{{ route('logout') }}" method="POST" class="d-inline">
                         @csrf

@@ -78,6 +78,26 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ![Preview](assets/image/Landing_page_sesudah_login.png)
 
+## Tampilan Halaman Profile
+
+![Preview](assets/image/halaman_profile.png)
+
+## Tampilan Halaman Dashboard
+
+![Preview](assets/image/halaman_dashboard.png)
+
+## Tampilan Halaman Tambah Berita
+
+![Preview](assets/image/halaman_tambah_berita.png)
+
+## Tampilan Halaman Edit Berita
+
+![Preview](assets/image/halaman_edit_berita.png)
+
+## Tampilan Halaman Berita
+
+![Preview](assets/image/halaman_berita.png)
+
 ## Email Login untuk Website Ini
 
 Email: ahmad.alfiansyah24@student.uisi.ac.id
